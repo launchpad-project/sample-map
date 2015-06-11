@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style type="text/css">
+		html, body, #map-canvas {
+			height: 100%;
+			margin: 0;
+			padding: 0;
+		}
+		#json-canvas {
+			background-color: white;
+			bottom: 5px;
+			left: 5px;
+			overflow: scroll;
+			padding: 5px;
+			position: absolute;
+			top: 5px;
+			width: 500px;
+		}
+	</style>
+</head>
+<body>
+	<div id="map-canvas"></div>
+	<pre id="json-canvas"></pre>
+
+	<!-- Google Maps -->
+	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js"></script>
+	<script type="text/javascript" src="map.js"></script>
+
+	<!-- Launchpad Client -->
+	<script type="text/javascript" src="https://rawgit.com/liferay-apps/api.js/master/build/globals/api-min.js"></script>
+
+	<!-- Launchpad Search -->
+	<script type="text/javascript" src="search.js"></script>
+</body>
+</html>
