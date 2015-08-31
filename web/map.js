@@ -48,8 +48,8 @@ function debounce(fn, delay) {
 
 google.maps.event.addDomListener(window, 'load', function() {
 	var center = {
-		lat: -8.0298834,
-		lng: -34.923041
+		lat: 34.0286230,
+		lng: -117.8103370
 	};
 
 	var map = new google.maps.Map(document.getElementById('map-canvas'), {
