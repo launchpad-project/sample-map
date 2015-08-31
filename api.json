@@ -1,0 +1,11 @@
+[
+	{
+		"method" : ["post","delete"],
+		"path" : "/",
+		"data" : true
+	},
+	{
+		"path" : "/venues/*",
+		"data" : true
+	}
+]
