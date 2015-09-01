@@ -4,7 +4,7 @@ function reloadVenues(circle) {
 	var lat = circle.center.lat();
 	var lng = circle.center.lng();
 	var radius = parseInt(circle.radius, 10);
-	var query = document.getElementById('query').value;
+	var query = document.getElementById('query').value.toLowerCase();
 
 	if (request) {
 		request.cancel();
@@ -19,7 +19,7 @@ function reloadVenues(circle) {
 			{
 				name: {
 					value: query,
-					operator: 'phrasePrefix'
+					operator: 'pre'
 				}
 			},
 			{

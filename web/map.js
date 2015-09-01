@@ -59,8 +59,8 @@ google.maps.event.addDomListener(window, 'load', function() {
 
 	var map = new google.maps.Map(document.getElementById('map-canvas'), {
 		center: center,
-		zoom: 15
-	});
+		zoom: 13
+	})
 
 	circle = new google.maps.Circle({
 		fillColor: '#FF0000',
@@ -72,7 +72,7 @@ google.maps.event.addDomListener(window, 'load', function() {
 		center: center,
 		draggable: true,
 		editable: true,
-		radius: 1000
+		radius: 2000
 	});
 
 	var reloadVenuesDebounced = debounce(reloadVenues.bind(null, circle), 100);
