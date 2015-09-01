@@ -1,3 +1,4 @@
+var circle;
 var markers = [];
 var infoWindows = [];
 
@@ -12,7 +13,7 @@ function clearPlot() {
 	infoWindows = [];
 }
 
-function plot(circle, name, geo_location) {
+function plot(circle, name, geo_location, showWindow) {
 	var latlng = geo_location.split(',');
 	var lat = parseFloat(latlng[0]);
 	var lng = parseFloat(latlng[1]);
@@ -33,6 +34,10 @@ function plot(circle, name, geo_location) {
 
 	markers.push(marker);
 	infoWindows.push(infoWindow);
+
+	if (showWindow) {
+		infoWindow.open(marker.map, marker);
+	}
 }
 
 function debounce(fn, delay) {
@@ -48,8 +53,8 @@ function debounce(fn, delay) {
 
 google.maps.event.addDomListener(window, 'load', function() {
 	var center = {
-		lat: -8.0298834,
-		lng: -34.923041
+		lat: 34.0286230,
+		lng: -117.8103370
 	};
 
 	var map = new google.maps.Map(document.getElementById('map-canvas'), {
@@ -57,7 +62,7 @@ google.maps.event.addDomListener(window, 'load', function() {
 		zoom: 15
 	});
 
-	var circle = new google.maps.Circle({
+	circle = new google.maps.Circle({
 		fillColor: '#FF0000',
 		fillOpacity: 0.35,
 		map: map,
