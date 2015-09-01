@@ -1,6 +1,6 @@
 #!/bin/bash
 
-curl 'localhost:8080/sample-map' \
+curl 'localhost:8080/map' \
 -H 'Content-Type: application/json' \
 -d '{
 	"name" : "venues",

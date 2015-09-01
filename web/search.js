@@ -1,5 +1,5 @@
 function reloadVenues(circle, type) {
-	var query = document.getElementById('search-form').elements.query.value;
+	var query = document.getElementById('form').query.value;
 
 	var search = {};
 
@@ -25,8 +25,8 @@ function reloadVenues(circle, type) {
 	search.highlight = { name: {} };
 
 	Launchpad
-		.url('http://localhost:8080/sample-map/venues')
-		.param('search', JSON.stringify(search))
+		.url('http://localhost:8080/map/venues')
+		.param('search', search)
 		.param('limit', 1000)
 		.get()
 		.then(function(clientResponse) {
@@ -44,6 +44,7 @@ function reloadVenues(circle, type) {
 					}
 				});
 			}
+
 			delete queryResult.metadata;
 
 			document.getElementById('json-canvas').innerHTML = JSON.stringify(queryResult, null, 2);
@@ -52,13 +53,13 @@ function reloadVenues(circle, type) {
 }
 
 function initialize() {
-	document.getElementById('search-form').onkeydown = function(e) {
+	document.getElementById('form').onkeydown = function(e) {
 		if (e.keyCode != 13 && circle) {
 			reloadVenues(circle, 'pre');
 		}
 	};
 
-	document.getElementById('search-form').onsubmit = function(e) {
+	document.getElementById('form').onsubmit = function(e) {
 		e.preventDefault();
 		if (circle) {
 			reloadVenues(circle, 'match');
