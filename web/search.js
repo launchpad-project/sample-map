@@ -1,70 +1,75 @@
-function reloadVenues(circle, type) {
-	var query = document.getElementById('form').query.value;
+var request;
 
-	var search = {};
+function reloadVenues(circle) {
+	var lat = circle.center.lat();
+	var lng = circle.center.lng();
+	var radius = parseInt(circle.radius, 10);
+	var query = document.getElementById('query').value;
 
-	search.preFilter = {
-		location: {
-			operator: 'gd',
-			value: {
-				location: [circle.center.lng(), circle.center.lat()],
-				max: parseInt(circle.radius, 10) + 'm'
-			}
-		}
-	};
-
-	if (query.length > 0) {
-		search.query = {
-			name: {
-				operator: type,
-				value: query
-			}
-		};
+	if (request) {
+		request.cancel();
 	}
 
-	search.highlight = { name: {} };
+	var search = {
+		highlight: {
+			name: {}
+		},
 
-	Launchpad
-		.url('http://localhost:8080/map/venues')
-		.param('search', search)
-		.param('limit', 1000)
-		.get()
-		.then(function(clientResponse) {
-			clearPlot();
-
-			var queryResult = clientResponse.body();
-			if (queryResult.documents) {
-				queryResult.documents.forEach(function(doc) {
-					var docMetadata = queryResult.metadata[doc.id];
-					if (docMetadata && docMetadata.highlights && docMetadata.highlights['name']) {
-						plot(circle, docMetadata.highlights['name'][0], doc.location, true);
+		query: [
+			{
+				name: {
+					value: query,
+					operator: 'phrasePrefix'
+				}
+			},
+			{
+				location: {
+					operator: 'gd',
+					value: {
+						location: [ lng, lat ],
+						max: radius + 'm'
 					}
-					else {
-						plot(circle, doc.name, doc.location);
-					}
-				});
+				}
 			}
+		]
+	};
 
-			delete queryResult.metadata;
+	request = Launchpad
+		.url('/map/venues')
+		.param('search', search)
+		.param('limit', 200)
+		.get()
+		.then(plotResults);
+}
 
-			document.getElementById('json-canvas').innerHTML = JSON.stringify(queryResult, null, 2);
+
+
+
+
+// Private helpers -------------------------------------------------------------
+
+function plotResults(response) {
+	clearPlot();
+	var queryResult = response.body();
+	if (queryResult.documents) {
+		queryResult.documents.forEach(function(doc) {
+			var docMetadata = queryResult.metadata[doc.id];
+			if (docMetadata && docMetadata.highlights && docMetadata.highlights['name']) {
+				doc.name =  docMetadata.highlights['name'][0];
+			}
+			plot(circle, doc.name, doc.location);
 		});
-
+	}
+	delete queryResult.metadata;
+	delete queryResult.nextPage;
+	document.getElementById('json-canvas').innerHTML = JSON.stringify(queryResult, null, 2);
 }
 
 function initialize() {
-	document.getElementById('form').onkeydown = function(e) {
-		if (e.keyCode != 13 && circle) {
-			reloadVenues(circle, 'pre');
-		}
-	};
-
-	document.getElementById('form').onsubmit = function(e) {
-		e.preventDefault();
+	document.getElementById('query').oninput = function(e) {
 		if (circle) {
-			reloadVenues(circle, 'match');
+			reloadVenues(circle);
 		}
-		return false;
 	};
 }
 
