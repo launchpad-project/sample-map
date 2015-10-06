@@ -4,41 +4,24 @@ function reloadVenues(circle) {
 	var lat = circle.center.lat();
 	var lng = circle.center.lng();
 	var radius = parseInt(circle.radius, 10);
-	var query = document.getElementById('query').value.toLowerCase();
+	var queryStr = document.getElementById('query').value;
 
 	if (request) {
 		request.cancel();
 	}
 
-	var search = {
-		highlight: {
-			name: {}
-		},
+	var query = Query
+		.search(Filter.distance('location', [ lng, lat ], radius + 'm'))
+		.highlight('name')
+		.limit(100);
 
-		query: [
-			{
-				name: {
-					value: query,
-					operator: 'pre'
-				}
-			},
-			{
-				location: {
-					operator: 'gd',
-					value: {
-						location: [ lng, lat ],
-						max: radius + 'm'
-					}
-				}
-			}
-		]
-	};
+	if (queryStr) {
+		query.search(Filter.prefix('name', queryStr))
+	}
 
 	request = Launchpad
-		.url('/map/venues')
-		.param('search', search)
-		.param('limit', 200)
-		.get()
+		.url('http://liferay.io/map/germany/places')
+		.get(query)
 		.then(plotResults);
 }
 
@@ -51,17 +34,13 @@ function reloadVenues(circle) {
 function plotResults(response) {
 	clearPlot();
 	var queryResult = response.body();
+	var showWindow = document.getElementById('query').value;
 	if (queryResult.documents) {
 		queryResult.documents.forEach(function(doc) {
-			var docMetadata = queryResult.metadata[doc.id];
-			if (docMetadata && docMetadata.highlights && docMetadata.highlights['name']) {
-				doc.name =  docMetadata.highlights['name'][0];
-			}
-			plot(circle, doc.name, doc.location);
+			plot(circle, doc.name, doc.location, showWindow);
 		});
 	}
-	delete queryResult.metadata;
-	delete queryResult.nextPage;
+	delete queryResult.scores;
 	document.getElementById('json-canvas').innerHTML = JSON.stringify(queryResult, null, 2);
 }
 

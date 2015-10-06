@@ -59,7 +59,7 @@ google.maps.event.addDomListener(window, 'load', function() {
 
 	var map = new google.maps.Map(document.getElementById('map-canvas'), {
 		center: center,
-		zoom: 13
+		zoom: 14
 	})
 
 	circle = new google.maps.Circle({
