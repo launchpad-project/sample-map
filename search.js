@@ -10,18 +10,13 @@ function reloadVenues(circle) {
 		request.cancel();
 	}
 
-	var query = Query
-		.search(Filter.distance('location', [ lng, lat ], radius + 'm'))
-		.highlight('name')
-		.limit(100);
-
-	if (queryStr) {
-		query.search(Filter.prefix('name', queryStr));
-	}
-
 	request = Launchpad
 		.url('http://liferay.io/map/germany/places')
-		.get(query)
+		.search(Filter.distance('location', [ lng, lat ], radius + 'm'))
+		.search(queryStr ? Filter.prefix('name', queryStr) : '*')
+		.highlight('name')
+		.limit(100)
+		.get()
 		.then(plotResults);
 }
 
