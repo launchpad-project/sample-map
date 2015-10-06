@@ -16,7 +16,7 @@ function reloadVenues(circle) {
 		.limit(100);
 
 	if (queryStr) {
-		query.search(Filter.prefix('name', queryStr))
+		query.search(Filter.prefix('name', queryStr));
 	}
 
 	request = Launchpad
