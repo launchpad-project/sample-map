@@ -11,7 +11,7 @@ function reloadVenues(circle) {
 	}
 
 	request = Launchpad
-		.url('http://liferay.io/map/germany/places')
+		.url('http://map.liferay.io/ny/venues/')
 		.search(Filter.distance('location', [ lng, lat ], radius + 'm'))
 		.search(queryStr ? Filter.prefix('name', queryStr) : '*')
 		.highlight('name')

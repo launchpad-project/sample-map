@@ -53,14 +53,14 @@ function debounce(fn, delay) {
 
 google.maps.event.addDomListener(window, 'load', function() {
 	var center = {
-		lat: 49.8743208,
-		lng: 8.6577125
+		lat: 40.77027183102676,
+		lng: -73.80739688873291
 	};
 
 	var map = new google.maps.Map(document.getElementById('map-canvas'), {
 		center: center,
 		zoom: 14
-	})
+	});
 
 	circle = new google.maps.Circle({
 		fillColor: '#FF0000',
