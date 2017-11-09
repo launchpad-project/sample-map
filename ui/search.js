@@ -12,7 +12,7 @@ function reloadVenues(circle) {
 
 	request = WeDeploy
 		.data('https://db-geodemo.wedeploy.io')
-		.prefix('name', queryStr)
+		.match('name', queryStr + '~')
 		.distance('location', [ lat, lng ], radius + 'm')
 		.highlight('name')
 		.search('places')
@@ -21,10 +21,6 @@ function reloadVenues(circle) {
 			console.log(results);
 		});
 }
-
-
-
-
 
 // Private helpers -------------------------------------------------------------
 
