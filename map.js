@@ -14,9 +14,8 @@ function clearPlot() {
 }
 
 function plot(circle, name, geo_location, showWindow) {
-	var latlng = geo_location.split(',');
-	var lat = parseFloat(latlng[0]);
-	var lng = parseFloat(latlng[1]);
+	var lat = geo_location[0];
+	var lng = geo_location[1];
 
 	var marker = new google.maps.Marker({
 		position: new google.maps.LatLng(lat, lng),
@@ -53,8 +52,8 @@ function debounce(fn, delay) {
 
 google.maps.event.addDomListener(window, 'load', function() {
 	var center = {
-		lat: 40.77027183102676,
-		lng: -73.80739688873291
+		lat: 49.87290488688408,
+		lng: 8.650870639227268
 	};
 
 	var map = new google.maps.Map(document.getElementById('map-canvas'), {
@@ -64,10 +63,10 @@ google.maps.event.addDomListener(window, 'load', function() {
 
 	circle = new google.maps.Circle({
 		fillColor: '#FF0000',
-		fillOpacity: 0.35,
+		fillOpacity: 0.15,
 		map: map,
 		strokeColor: '#FF0000',
-		strokeOpacity: 0.8,
+		strokeOpacity: 0.5,
 		strokeWeight: 2,
 		center: center,
 		draggable: true,

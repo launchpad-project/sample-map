@@ -6,18 +6,20 @@ function reloadVenues(circle) {
 	var radius = parseInt(circle.radius, 10);
 	var queryStr = document.getElementById('query').value;
 
-	if (request) {
-		request.cancel();
-	}
+	// if (request) {
+	// 	request.cancel();
+	// }
 
-	request = Launchpad
-		.url('http://map.liferay.io/ny/venues/')
-		.search(Filter.distance('location', [ lng, lat ], radius + 'm'))
-		.search(queryStr ? Filter.prefix('name', queryStr) : '*')
+	request = WeDeploy
+		.data('https://db-geodemo.wedeploy.io')
+		.prefix('name', queryStr)
+		.distance('location', [ lat, lng ], radius + 'm')
 		.highlight('name')
-		.limit(100)
-		.get()
-		.then(plotResults);
+		.search('places')
+		.then(function(results) {
+			plotResults(results);
+			console.log(results);
+		});
 }
 
 
@@ -28,15 +30,17 @@ function reloadVenues(circle) {
 
 function plotResults(response) {
 	clearPlot();
-	var queryResult = response.body();
+	var queryResult = response;
 	var showWindow = document.getElementById('query').value;
 	if (queryResult.documents) {
-		queryResult.documents.forEach(function(doc) {
-			plot(circle, doc.name, doc.location, showWindow);
+		queryResult.documents.forEach(function(place) {
+			plot(circle, place.name, place.location, showWindow);
 		});
 	}
 	delete queryResult.scores;
-	document.getElementById('json-canvas').innerHTML = JSON.stringify(queryResult, null, 2);
+	if (queryResult.documents) {
+		document.getElementById('json-canvas').innerHTML = JSON.stringify(queryResult.documents, null, 2);
+	}
 }
 
 function initialize() {
