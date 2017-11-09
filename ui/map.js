@@ -58,7 +58,10 @@ google.maps.event.addDomListener(window, 'load', function() {
 
 	var map = new google.maps.Map(document.getElementById('map-canvas'), {
 		center: center,
-		zoom: 14
+		zoom: 14,
+		mapTypeControl: false,
+		fullscreenControl: false,
+		streetViewControl: false
 	});
 
 	circle = new google.maps.Circle({
