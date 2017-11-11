@@ -1,21 +1,17 @@
 var circle;
 var markers = [];
-var infoWindows = [];
 
 function clearPlot() {
 	markers.forEach(function(marker) {
 		marker.setMap(null);
 	});
-	infoWindows.forEach(function(infoWindow) {
-		infoWindow.close();
-	});
 	markers = [];
-	infoWindows = [];
 }
 
-function plot(circle, name, geo_location, showWindow) {
-	var lat = geo_location[0];
-	var lng = geo_location[1];
+function plotMarkers(circle, name, geo_location, id, categories) {
+	var latLng = geo_location.split(', ');
+	var lat = latLng[0];
+	var lng = latLng[1];
 
 	var marker = new google.maps.Marker({
 		position: new google.maps.LatLng(lat, lng),
@@ -23,20 +19,43 @@ function plot(circle, name, geo_location, showWindow) {
 		title: name
 	});
 
-	var infoWindow = new google.maps.InfoWindow({
-		content: marker.title
-	});
+  var markerMap = marker.map;
 
-	google.maps.event.addListener(marker, 'click', function() {
-		infoWindow.open(marker.map, marker);
-	});
+  createInfoWindow();
+  markers.push(marker);
+}
 
-	markers.push(marker);
-	infoWindows.push(infoWindow);
+function createInfoWindow(lat, lng) {
+  var listings = document.querySelectorAll('.list-result-container');
 
-	if (showWindow) {
-		infoWindow.open(marker.map, marker);
-	}
+  listings.forEach(function(listing) {
+    listing.addEventListener('mouseenter', function(place) {
+      var data = place.target.attributes;
+
+      var markerContent = '<div class="marker-container">' +
+        '<p class="name">' + data[1].value + '</p>' +
+        '<p class="categories"><em>Categories:</em><br>' + data[2].value + '</p>' +
+        '</div';
+
+      latLng = data[3].value.split(', ');
+      var lat = latLng[0];
+      var lng = latLng[1];
+
+      var infoWindow = new google.maps.InfoWindow({
+        content: markerContent,
+        maxWidth: 260,
+        position: new google.maps.LatLng(lat, lng),
+        pixelOffset: new google.maps.Size(0,-28)
+      });
+
+      infoWindow.open(circle.map);
+
+      listing.addEventListener('mouseleave', function(place) {
+        infoWindow.close();
+      });
+    });
+
+  });
 }
 
 function debounce(fn, delay) {
@@ -52,8 +71,8 @@ function debounce(fn, delay) {
 
 google.maps.event.addDomListener(window, 'load', function() {
 	var center = {
-		lat: 49.87290488688408,
-		lng: 8.650870639227268
+		lat: 41.4993,
+		lng: -81.6944
 	};
 
 	var map = new google.maps.Map(document.getElementById('map-canvas'), {
@@ -66,18 +85,18 @@ google.maps.event.addDomListener(window, 'load', function() {
 
 	circle = new google.maps.Circle({
 		fillColor: '#FF0000',
-		fillOpacity: 0.15,
+		fillOpacity: 0.1,
 		map: map,
 		strokeColor: '#FF0000',
 		strokeOpacity: 0.5,
-		strokeWeight: 2,
+		strokeWeight: 1.5,
 		center: center,
 		draggable: true,
 		editable: true,
-		radius: 2000
+		radius: 1400
 	});
 
-	var reloadVenuesDebounced = debounce(reloadVenues.bind(null, circle), 100);
+	var reloadVenuesDebounced = debounce(reloadVenues.bind(null, circle), 200);
 	google.maps.event.addListener(circle, 'radius_changed', reloadVenuesDebounced);
 	google.maps.event.addListener(circle, 'center_changed', reloadVenuesDebounced);
 	reloadVenues(circle);

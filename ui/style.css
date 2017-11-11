@@ -2,7 +2,7 @@ html, body, #map-canvas {
 	height: 100%;
 	margin: 0;
 	padding: 0;
-	font: 400 16px/24px Roboto,sans-serif;
+	font: 400 16px Roboto,sans-serif;
 }
 
 em {
@@ -16,20 +16,51 @@ em {
 	font-weight: bold;
 }
 
-#json-canvas {
+.list-result-container {
+	border-bottom: 1px solid rgba(77, 144, 254, .2);
+	padding: 12px;
+  cursor: default;
+  transition: .333s;
+}
+
+.list-result-container:hover {
+  background-color: rgba(77, 144, 254, .2);
+}
+
+.name {
+	font-size: 18px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+	line-height: 22px;
+}
+
+.categories {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+#result-canvas {
 	background-color: white;
-	bottom: 5px;
+  display: none;
+	bottom: 15px;
 	box-shadow: 0 2px 6px rgba(0,0,0,0.3),0 4px 15px -5px rgba(0,0,0,0.0);
 	font-size: 12px;
 	font-weight: 300;
-	left: 6px;
+	left: 16px;
 	line-height: 16px;
 	overflow-x: hidden;
 	overflow-y: scroll;
-	padding: 5px;
 	position: absolute;
-	top: 52px;
-	width: 30%;
+	top: 56px;
+	width: 30.8%;
+	transition: .333s;
+}
+
+#result-time {
+  text-align: right;
+  margin: 10px 10px 5px;
 }
 
 #query {
@@ -37,11 +68,13 @@ em {
 	box-shadow: 0 2px 6px rgba(0,0,0,0.3),0 4px 15px -5px rgba(0,0,0,0.0);
 	font-size: 15px;
 	font-weight: 300;
-	left: 5px;
+	left: 15px;
 	line-height: 20px;
 	outline: none;
 	padding: 5px;
 	position: absolute;
 	top: 15px;
 	width: 30%;
+  height: 32px;
+  line-height: 32px;
 }
