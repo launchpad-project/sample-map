@@ -8,7 +8,7 @@ function clearPlot() {
 	markers = [];
 }
 
-function plotMarkers(circle, name, geo_location, id, categories) {
+function plotMarkers(circle, name, geo_location, categories) {
 	var latLng = geo_location.split(', ');
 	var lat = latLng[0];
 	var lng = latLng[1];
@@ -25,14 +25,14 @@ function plotMarkers(circle, name, geo_location, id, categories) {
   markers.push(marker);
 }
 
-function createInfoWindow(lat, lng) {
+function createInfoWindow() {
   var listings = document.querySelectorAll('.list-result-container');
 
   listings.forEach(function(listing) {
-    listing.addEventListener('mouseenter', function(place) {
-      var data = place.target.attributes;
+    listing.addEventListener('mouseenter', function(listingItem) {
+      var data = listingItem.target.attributes;
 
-      var markerContent = '<div class="marker-container">' +
+      var infoWindowContent = '<div class="marker-container">' +
         '<p class="name">' + data[1].value + '</p>' +
         '<p class="categories"><em>Categories:</em><br>' + data[2].value + '</p>' +
         '</div';
@@ -42,7 +42,7 @@ function createInfoWindow(lat, lng) {
       var lng = latLng[1];
 
       var infoWindow = new google.maps.InfoWindow({
-        content: markerContent,
+        content: infoWindowContent,
         maxWidth: 260,
         position: new google.maps.LatLng(lat, lng),
         pixelOffset: new google.maps.Size(0,-28)
@@ -50,7 +50,7 @@ function createInfoWindow(lat, lng) {
 
       infoWindow.open(circle.map);
 
-      listing.addEventListener('mouseleave', function(place) {
+      listing.addEventListener('mouseleave', function() {
         infoWindow.close();
       });
     });

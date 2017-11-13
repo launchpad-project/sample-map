@@ -1,7 +1,7 @@
-function reloadVenues(circle, map) {
-	var lat = circle.center.lat();
-	var lng = circle.center.lng();
-	var radius = parseInt(circle.radius, 10);
+function reloadVenues(searchArea) {
+	var lat = searchArea.center.lat();
+	var lng = searchArea.center.lng();
+	var radius = parseInt(searchArea.radius, 10);
 	var queryStr = document.getElementById('query').value;
 
 	WeDeploy
@@ -13,44 +13,44 @@ function reloadVenues(circle, map) {
 		.highlight('name')
 		.search('places')
 		.then(function(results) {
-			plotResults(results, map);
-			console.log(results);
+			plotResults(results);
 		})
 }
 
 // Private helpers -------------------------------------------------------------
 
-function plotResults(queryResult) {
+function plotResults(results) {
 	clearPlot();
 
-  if (queryResult.documents) {
+  var resultCanvas = document.getElementById('result-canvas');
+  var resultTime = document.getElementById('result-time');
+  var resultItems = document.getElementById('results');
+
+  if (results.documents) {
     var resultList = '';
+    var resultTimeResponse = results.documents.length + ' results found in ' + results.queryTime + 'ms.';
+    resultTime.innerHTML = resultTimeResponse;
+    resultCanvas.style.display = "inline";
 
-    document.getElementById('result-canvas').style.display = "inline";
-
-    var resultTime = queryResult.documents.length + ' results found in ' + queryResult.queryTime + 'ms.';
-    document.getElementById('result-time').innerHTML = resultTime;
-
-		queryResult.documents.forEach(function(place) {
+		results.documents.forEach(function(place) {
 			var categoryString = place.categories.toString().replace(/,/g, ', ');
-      var placeId = place.id;
 
 			resultList +=
         '<div class="list-result-container" data-name="' + place.name + '" data-categories="' + categoryString + '" data-location="' + place.location + '">' +
-				'<p class="name">' + queryResult.highlights[placeId].name[0] + '</p>' +
+				'<p class="name">' + results.highlights[place.id].name[0] + '</p>' +
 				'<p class="address">' + place.address + '<br>'
 				+ place.city + ', ' + place.state + ' ' + place.postal_code + '</p>' +
 				'</div>';
 
-			document.getElementById('results').innerHTML = resultList;
-      plotMarkers(circle, place.name, place.location, place.id, categoryString);
+			resultItems.innerHTML = resultList;
+      plotMarkers(circle, place.name, place.location, categoryString);
       createInfoWindow();
 		});
 
 	} else {
-    document.getElementById('result-canvas').style.display = "none";
-		document.getElementById('results').innerHTML = '';
-    document.getElementById('result-time').innerHTML = '';
+    resultCanvas.style.display = "none";
+		resultItems.innerHTML = '';
+    resultTime.innerHTML = '';
 	}
 }
 
