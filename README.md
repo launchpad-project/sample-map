@@ -1,6 +1,6 @@
 # Geolocation Search [![Badge](https://img.shields.io/badge/built%20with-wedeploy-00d46a.svg?style=flat)](http://wedeploy.com)
 
-A demo of [WeDeploy Hosting](https://wedeploy.com/docs/hosting/) and [WeDeploy Data](https://wedeploy.com/docs/data/).
+An example of [WeDeploy Hosting](https://wedeploy.com/docs/hosting/) and [WeDeploy Data](https://wedeploy.com/docs/data/).
 
 ## Instructions
 
